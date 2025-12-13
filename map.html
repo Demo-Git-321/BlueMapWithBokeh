@@ -22,19 +22,22 @@
         width: 100%; 
         height: 100%;
         
-        /* UPDATED MASKING STRATEGY:
-           Slightly slimmer transparent zones (wider visible area)
-        */
-        
+        /* Apply border-radius to round the corners of the masked area */
+        border-radius: 20px; 
+        overflow: hidden;
+    }
+    
+    /* NEW: Class containing the transparency mask properties */
+    .vignette-mask {
         /* Define gradients: Fade from transparent to black (visible) and back to transparent */
-        --mask-h: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); /* Adjusted from 15% and 85% */
-        --mask-v: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%); /* Adjusted from 15% and 85% */
+        --mask-h: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        --mask-v: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
 
         /* Apply both gradients as masks */
         -webkit-mask-image: var(--mask-h), var(--mask-v);
         mask-image: var(--mask-h), var(--mask-v);
         
-        /* Composite them using 'source-in' (Webkit) or 'intersect'. */
+        /* Composite them using 'source-in' (Webkit) or 'intersect'). */
         -webkit-mask-composite: source-in;
         mask-composite: intersect;
         
@@ -43,6 +46,7 @@
         -webkit-mask-size: 100% 100%;
         mask-size: 100% 100%;
     }
+
 
     #homeBtn {
         position: absolute;
@@ -176,6 +180,9 @@
   <div id="map"></div>
   <button id="homeBtn">Re-center</button>
   <script>
+    // NEW: Key/Value to enable/disable transparency effect
+    const ENABLE_TRANSPARENCY = true; 
+
     // --- Map Setup ---
     const DefaultStyle = 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBAb04zVERRS2ZwWDdhZ2xFSjspn2GLEU1JFIZbzXaj_Yp-.json?key=ktmhc0kCSdk8VdMrfAi4J8ZaVOu4FQqu';
     const SatelliteStyle = 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBAb04zVERRS2ZwWDdhZ2xFSjtouu6VruNH9K396JnwpLxH.json?key=ktmhc0kCSdk8VdMrfAi4J8ZaVOu4FQqu';
@@ -197,7 +204,13 @@
             bearing: defaultBearing,
             style: AIMode
     });  
-        // --- Popup for hover callouts ---
+
+    // Apply the transparency class if enabled immediately after map definition
+    if (ENABLE_TRANSPARENCY) {
+        document.getElementById('map').classList.add('vignette-mask');
+    }
+    
+    // --- Popup for hover callouts ---
 
     let popup = null;
     let markers = [];
