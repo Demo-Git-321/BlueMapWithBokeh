@@ -49,10 +49,10 @@
     }
 
 
-    #homeBtn {
+    /* Base styling for both action buttons */
+    .action-button {
         position: absolute;
         top: 10px;
-        right: 10px;
         z-index: 999;
         /* Smaller and Dark mode styling */
         background: #1F2937; /* Dark background */
@@ -67,9 +67,25 @@
         cursor: pointer;
         transition: background 0.2s; /* Add transition */
     }
-    #homeBtn:hover {
+
+    .action-button:hover {
         background: #374151; /* Lighter dark background on hover */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    }
+    
+    /* Position for the Re-center button */
+    #homeBtn {
+        right: 10px;
+    }
+
+    /* Position for the NEW Map Toggle button */
+    #mapToggleBtn {
+        left: 10px;
+    }
+
+    /* Styling for the map container when hidden */
+    .map-hidden {
+        display: none !important;
     }
     
     /* --- MODIFIED CSS STARTS HERE --- */
@@ -179,7 +195,8 @@
 </head>
 <body>
   <div id="map"></div>
-  <button id="homeBtn">Re-center</button>
+  <button id="mapToggleBtn" class="action-button">🌐 Map</button>
+  <button id="homeBtn" class="action-button">Re-center</button>
   <script>
     // NEW: Key/Value to enable/disable transparency effect
     const ENABLE_TRANSPARENCY = true; 
@@ -206,10 +223,34 @@
             style: AIMode
     });  
 
+    // Get button and map elements
+    const mapElement = document.getElementById('map');
+    const mapToggleBtn = document.getElementById('mapToggleBtn');
+
+
     // Apply the transparency class if enabled immediately after map definition
     if (ENABLE_TRANSPARENCY) {
-        document.getElementById('map').classList.add('vignette-mask');
+        mapElement.classList.add('vignette-mask');
     }
+
+    // --- NEW: Map Toggle Logic ---
+    let isMapVisible = true;
+    mapToggleBtn.addEventListener('click', () => {
+        isMapVisible = !isMapVisible;
+        
+        if (isMapVisible) {
+            mapElement.classList.remove('map-hidden');
+            mapToggleBtn.textContent = '🌐 Map';
+        } else {
+            mapElement.classList.add('map-hidden');
+            mapToggleBtn.textContent = '☐ Map';
+        }
+        
+        // Ensure the map viewport is adjusted when it becomes visible again
+        if (isMapVisible) {
+            map.resize();
+        }
+    });
     
     // --- Popup for hover callouts ---
 
