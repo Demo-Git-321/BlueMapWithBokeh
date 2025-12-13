@@ -30,9 +30,9 @@
     /* NEW: Class containing the transparency mask properties */
     .vignette-mask {
         /* Define gradients: Fade from transparent to black (visible) and back to transparent */
-        /* MODIFIED: Adjusted the width of the gradient zone from 5%/95% to 10%/90% for a slightly wider, softer vignette. */
-        --mask-h: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-        --mask-v: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+        /* REVERTED: Reverting to the previous, more 'aggressive' vignette effect (sharper fade) at 5%/95%. */
+        --mask-h: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        --mask-v: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
 
         /* Apply both gradients as masks */
         -webkit-mask-image: var(--mask-h), var(--mask-v);
