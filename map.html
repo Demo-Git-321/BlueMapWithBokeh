@@ -22,7 +22,7 @@
         width: 100%; 
         height: 100%;
         
-        /* MODIFIED: Increased border-radius for more rounded corners */
+        /* MODIFIED: Increased border-radius for more rounded corners (Kept at 32px) */
         border-radius: 32px; 
         overflow: hidden;
     }
@@ -30,9 +30,9 @@
     /* NEW: Class containing the transparency mask properties */
     .vignette-mask {
         /* Define gradients: Fade from transparent to black (visible) and back to transparent */
-        /* REVERTED: Reverting to the previous, more 'aggressive' vignette effect (sharper fade) at 5%/95%. */
-        --mask-h: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-        --mask-v: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+        /* ADJUSTED: Further increasing the gradient zone width (making it even wider and smoother) by changing stops from 10%/90% to 15%/85%. */
+        --mask-h: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+        --mask-v: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
 
         /* Apply both gradients as masks */
         -webkit-mask-image: var(--mask-h), var(--mask-v);
