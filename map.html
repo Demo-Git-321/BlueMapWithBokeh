@@ -21,19 +21,30 @@
     #map { 
         width: 100%; 
         height: 100%;
-        /* This creates the transparency mask.
-           Pixels where the mask is black are visible (opaque).
-           Pixels where the mask is transparent are hidden.
-           The gradient goes from opaque (center) to transparent (edges), 
-           creating the melting effect.
+        
+        /* UPDATED MASKING STRATEGY:
+           Instead of a radial gradient which can be oval, we use two linear gradients.
+           One fades horizontally, one vertically.
+           We composite them to create a rectangular fade that is soft on all 4 sides.
         */
-        -webkit-mask-image: radial-gradient(ellipse at center, black 45%, transparent 100%);
-        mask-image: radial-gradient(ellipse at center, black 45%, transparent 100%);
+        
+        /* Define gradients: Fade from transparent to black (visible) and back to transparent */
+        --mask-h: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+        --mask-v: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+
+        /* Apply both gradients as masks */
+        -webkit-mask-image: var(--mask-h), var(--mask-v);
+        mask-image: var(--mask-h), var(--mask-v);
+        
+        /* Composite them using 'source-in' (Webkit) or 'intersect'.
+           This effectively multiplies the alpha channels, keeping only the overlapping opaque areas.
+           Result: A rectangular visible area with soft fading edges on all sides.
+        */
+        -webkit-mask-composite: source-in;
+        mask-composite: intersect;
         
         -webkit-mask-repeat: no-repeat;
         mask-repeat: no-repeat;
-        
-        /* Ensure the mask covers the whole area */
         -webkit-mask-size: 100% 100%;
         mask-size: 100% 100%;
     }
