@@ -22,17 +22,17 @@
         width: 100%; 
         height: 100%;
         
-        /* Apply border-radius to round the corners of the masked area */
-        border-radius: 20px; 
+        /* MODIFIED: Increased border-radius for more rounded corners */
+        border-radius: 32px; 
         overflow: hidden;
     }
     
     /* NEW: Class containing the transparency mask properties */
     .vignette-mask {
         /* Define gradients: Fade from transparent to black (visible) and back to transparent */
-        /* MODIFIED: Changed 10% to 20% and 90% to 80% for a much softer transition zone */
-        --mask-h: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
-        --mask-v: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+        /* MODIFIED: Adjusted the width of the gradient zone from 5%/95% to 10%/90% for a slightly wider, softer vignette. */
+        --mask-h: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        --mask-v: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
 
         /* Apply both gradients as masks */
         -webkit-mask-image: var(--mask-h), var(--mask-v);
@@ -65,7 +65,7 @@
         color: #E5E7EB; /* Light text */
         font-weight: 500; /* Slightly lighter weight */
         cursor: pointer;
-        transition: background 0.2s; /* Add transition */
+        transition: background 0.2s, opacity 0.3s; /* Added opacity transition */
     }
 
     .action-button:hover {
@@ -88,6 +88,13 @@
         display: none !important;
     }
     
+    /* Utility class to hide the recenter button */
+    .button-hidden {
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+    }
+
     /* --- MODIFIED CSS STARTS HERE --- */
 
     /* Custom popup styling - Dark Theme (Reduced size/compression) */
@@ -226,7 +233,7 @@
     // Get button and map elements
     const mapElement = document.getElementById('map');
     const mapToggleBtn = document.getElementById('mapToggleBtn');
-
+    const homeBtn = document.getElementById('homeBtn'); // Get the recenter button
 
     // Apply the transparency class if enabled immediately after map definition
     if (ENABLE_TRANSPARENCY) {
@@ -240,9 +247,11 @@
         
         if (isMapVisible) {
             mapElement.classList.remove('map-hidden');
+            homeBtn.classList.remove('button-hidden'); // Show home button
             mapToggleBtn.textContent = '🌐 Map';
         } else {
             mapElement.classList.add('map-hidden');
+            homeBtn.classList.add('button-hidden'); // Hide home button
             mapToggleBtn.textContent = '☐ Map';
         }
         
@@ -260,7 +269,7 @@
     let isMouseOverPopup = false;
 
     // --- Home Button Logic ---
-    document.getElementById('homeBtn').addEventListener('click', () => {
+    homeBtn.addEventListener('click', () => {
     map.flyTo({
             center: defaultCenter,
             zoom: defaultZoom,
