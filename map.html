@@ -23,23 +23,18 @@
         height: 100%;
         
         /* UPDATED MASKING STRATEGY:
-           Instead of a radial gradient which can be oval, we use two linear gradients.
-           One fades horizontally, one vertically.
-           We composite them to create a rectangular fade that is soft on all 4 sides.
+           Slightly slimmer transparent zones (wider visible area)
         */
         
         /* Define gradients: Fade from transparent to black (visible) and back to transparent */
-        --mask-h: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
-        --mask-v: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+        --mask-h: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); /* Adjusted from 15% and 85% */
+        --mask-v: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%); /* Adjusted from 15% and 85% */
 
         /* Apply both gradients as masks */
         -webkit-mask-image: var(--mask-h), var(--mask-v);
         mask-image: var(--mask-h), var(--mask-v);
         
-        /* Composite them using 'source-in' (Webkit) or 'intersect'.
-           This effectively multiplies the alpha channels, keeping only the overlapping opaque areas.
-           Result: A rectangular visible area with soft fading edges on all sides.
-        */
+        /* Composite them using 'source-in' (Webkit) or 'intersect'. */
         -webkit-mask-composite: source-in;
         mask-composite: intersect;
         
@@ -80,11 +75,11 @@
         border: 1px solid #4A5568 !important;
         border-radius: 8px !important;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1) !important;
-        padding: 12px !important; /* Reduced padding */
-        font-size: 14px !important; 
+        padding: 10px !important; /* Reduced padding */
+        font-size: 13px !important; /* Reduced font size */
         color: #E2E8F0 !important; /* Light text */
-        min-width: 240px !important; /* Reduced min width */
-        max-width: 300px !important; /* Reduced max width */
+        min-width: 220px !important; /* Reduced min width */
+        max-width: 280px !important; /* Reduced max width */
     }
 
     .mapboxgl-popup-tip {
@@ -98,26 +93,26 @@
 
     .center-info-popup {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        font-size: 14px;
-        line-height: 1.5; /* Reduced line height */
+        font-size: 13px; /* Reduced font size */
+        line-height: 1.5; 
         color: #E2E8F0; /* Light text */
     }
 
     .center-info-popup .center-name {
         font-weight: 600;
-        font-size: 15px; /* Reduced font size */
-        margin-bottom: 6px; /* Reduced margin */
+        font-size: 14px; /* Reduced font size */
+        margin-bottom: 6px; 
     }
 
     .center-info-popup .center-name a {
         color: #FFFFFF !important; /* White text for link */
-        text-decoration: none; /* Remove underline by default */
+        text-decoration: none; 
         outline: none;
         border: none;
     }
 
     .center-info-popup .center-name a:hover {
-        text-decoration: underline; /* Add underline on hover */
+        text-decoration: underline; 
     }
 
     .center-info-popup .center-name a:focus {
@@ -126,7 +121,7 @@
     }
 
     .center-info-popup .info-row {
-        margin-bottom: 3px; /* Reduced margin */
+        margin-bottom: 2px; /* Reduced margin */
         display: flex;
         justify-content: space-between;
     }
@@ -160,8 +155,8 @@
 
     /* Custom marker styling (Reduced size) */
     .custom-marker {
-            width: 24px; /* Reduced width */
-            height: 24px; /* Reduced height */
+            width: 24px; 
+            height: 24px; 
             background-image: url('marker-icon.png');
             background-size: contain;
             background-repeat: no-repeat;
@@ -316,7 +311,7 @@
                 popup = new tt.Popup({
                     closeButton: false,
                     closeOnClick: false,
-                    offset: [0, -30] // Adjusted offset for smaller marker
+                    offset: [0, -30] // Offset for smaller marker
                 })
                 .setLngLat(coords)
                 // --- UPDATED HTML TEMPLATE ---
