@@ -13,7 +13,6 @@
         padding: 0; 
         height: 100%; 
         width: 100%; 
-        /* Completely transparent background to let the parent background shine through */
         background-color: transparent; 
         overflow: hidden; 
     }
@@ -21,27 +20,17 @@
     #map { 
         width: 100%; 
         height: 100%;
-        
-        /* MODIFIED: Increased border-radius for more rounded corners (Kept at 32px) */
         border-radius: 32px; 
         overflow: hidden;
     }
     
-    /* NEW: Class containing the transparency mask properties */
     .vignette-mask {
-        /* Define gradients: Fade from transparent to black (visible) and back to transparent */
-        /* ADJUSTED: Further increasing the gradient zone width (making it even wider and smoother) by changing stops from 10%/90% to 15%/85%. */
         --mask-h: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
         --mask-v: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-
-        /* Apply both gradients as masks */
         -webkit-mask-image: var(--mask-h), var(--mask-v);
         mask-image: var(--mask-h), var(--mask-v);
-        
-        /* Composite them using 'source-in' (Webkit) or 'intersect'). */
         -webkit-mask-composite: source-in;
         mask-composite: intersect;
-        
         -webkit-mask-repeat: no-repeat;
         mask-repeat: no-repeat;
         -webkit-mask-size: 100% 100%;
@@ -54,134 +43,105 @@
         position: absolute;
         top: 10px;
         z-index: 999;
-        /* Smaller and Dark mode styling */
-        background: #1F2937; /* Dark background */
-        border: 1px solid #374151; /* Darker border */
-        border-radius: 4px; /* Slightly smaller radius */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Stronger dark shadow */
-        padding: 4px 8px; /* Smaller padding */
+        background: #1F2937; 
+        border: 1px solid #374151; 
+        border-radius: 4px; 
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+        padding: 4px 8px; 
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        font-size: 11px; /* Smaller font */
-        color: #E5E7EB; /* Light text */
-        font-weight: 500; /* Slightly lighter weight */
+        font-size: 11px; 
+        color: #E5E7EB; 
+        font-weight: 500; 
         cursor: pointer;
-        transition: background 0.2s, opacity 0.3s; /* Added opacity transition */
+        transition: background 0.2s, opacity 0.3s; 
     }
 
     .action-button:hover {
-        background: #374151; /* Lighter dark background on hover */
+        background: #374151; 
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
     }
     
-    /* Position for the Re-center button */
-    #homeBtn {
-        right: 10px;
-    }
+    #homeBtn { right: 10px; }
+    #mapToggleBtn { left: 10px; }
 
-    /* Position for the NEW Map Toggle button */
-    #mapToggleBtn {
-        left: 10px;
-    }
+    .map-hidden { display: none !important; }
+    .button-hidden { opacity: 0; pointer-events: none; visibility: hidden; }
 
-    /* Styling for the map container when hidden */
-    .map-hidden {
-        display: none !important;
-    }
-    
-    /* Utility class to hide the recenter button */
-    .button-hidden {
-        opacity: 0;
-        pointer-events: none;
-        visibility: hidden;
-    }
-
-    /* --- MODIFIED CSS STARTS HERE --- */
-
-    /* Custom popup styling - Dark Theme (Reduced size/compression) */
+    /* --- POPUP STYLING (DARK THEME) --- */
     .mapboxgl-popup-content {
         background: #2D3748 !important; /* Dark blue-gray */
         border: 1px solid #4A5568 !important;
         border-radius: 8px !important;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1) !important;
-        padding: 10px !important; /* Reduced padding */
-        font-size: 13px !important; /* Reduced font size */
-        color: #E2E8F0 !important; /* Light text */
-        min-width: 220px !important; /* Reduced min width */
-        max-width: 280px !important; /* Reduced max width */
+        padding: 10px !important; 
+        font-size: 13px !important; 
+        color: #E2E8F0 !important; 
+        min-width: 220px !important; 
+        max-width: 280px !important; 
     }
 
     .mapboxgl-popup-tip {
-        border-top-color: #2D3748 !important; /* Match dark background */
-        border-bottom-color: #2D3748 !important; /* Match dark background */
+        border-top-color: #2D3748 !important; 
+        border-bottom-color: #2D3748 !important; 
     }
 
-    .mapboxgl-popup-close-button {
-        display: none !important;
-    }
+    .mapboxgl-popup-close-button { display: none !important; }
 
     .center-info-popup {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        font-size: 13px; /* Reduced font size */
+        font-size: 13px; 
         line-height: 1.5; 
-        color: #E2E8F0; /* Light text */
+        color: #E2E8F0; 
     }
 
     .center-info-popup .center-name {
         font-weight: 600;
-        font-size: 14px; /* Reduced font size */
+        font-size: 14px; 
         margin-bottom: 6px; 
     }
 
     .center-info-popup .center-name a {
-        color: #FFFFFF !important; /* White text for link */
+        color: #FFFFFF !important; 
         text-decoration: none; 
         outline: none;
         border: none;
     }
 
-    .center-info-popup .center-name a:hover {
-        text-decoration: underline; 
-    }
-
-    .center-info-popup .center-name a:focus {
-        outline: none;
-        border: none;
-    }
+    .center-info-popup .center-name a:hover { text-decoration: underline; }
 
     .center-info-popup .info-row {
-        margin-bottom: 2px; /* Reduced margin */
+        margin-bottom: 2px; 
         display: flex;
         justify-content: space-between;
     }
 
     .center-info-popup .info-label {
         font-weight: 500;
-        color: #A0AEC0; /* Medium-light gray for labels */
+        color: #A0AEC0; 
         margin-right: 8px;
     }
 
     .center-info-popup .info-value {
         font-weight: 600;
-        color: #FFFFFF; /* White text for values */
+        color: #FFFFFF; 
     }
 
-    .center-info-popup .rating-stars {
-        color: #F59E0B; /* Amber/gold star color */
+    .center-info-popup .rating-stars { color: #F59E0B; }
+
+    /* Colors */
+    .info-value.wt-green { color: #68D391; }
+    .info-value.wt-yellow { color: #F6E05E; }
+    .info-value.wt-red { color: #F56565; }
+    .info-value.wt-blue { color: #63B3ED; } /* Cyan for counters */
+
+    /* Live Counter Font */
+    .live-counter-val {
+        font-family: 'Courier New', monospace; /* Monospace for number stability */
+        font-weight: 700;
+        transition: color 0.3s ease;
     }
 
-    .info-value.wt-green {
-        color: #68D391; /* Light pastel green */
-    }
-    .info-value.wt-yellow {
-        color: #F6E05E; /* Light pastel yellow */
-    }
-    .info-value.wt-red {
-        color: #F56565; /* Light pastel red */
-    }
-        /* --- MODIFIED CSS ENDS HERE --- */
-
-
-    /* Custom marker styling (Reduced size) */
+    /* Custom marker styling */
     .custom-marker {
             width: 24px; 
             height: 24px; 
@@ -205,20 +165,63 @@
   <button id="mapToggleBtn" class="action-button">🌐 Map</button>
   <button id="homeBtn" class="action-button">Re-center</button>
   <script>
-    // NEW: Key/Value to enable/disable transparency effect
     const ENABLE_TRANSPARENCY = true; 
 
     // --- Map Setup ---
     const DefaultStyle = 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBAb04zVERRS2ZwWDdhZ2xFSjspn2GLEU1JFIZbzXaj_Yp-.json?key=ktmhc0kCSdk8VdMrfAi4J8ZaVOu4FQqu';
     const SatelliteStyle = 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBAb04zVERRS2ZwWDdhZ2xFSjtouu6VruNH9K396JnwpLxH.json?key=ktmhc0kCSdk8VdMrfAi4J8ZaVOu4FQqu';
-    const SUNSETMode = 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBAb04zVERRS2ZwWDdhZ2xFSjsB_gBLEvBCSaM_YRMycn2x/drafts/0.json?key=ktmhc0kCSdk8VdMrfAi4J8ZaVOu4FQqu';
-    
     const AIMode = 'https://api.tomtom.com/style/2/custom/style/dG9tdG9tQEBAb04zVERRS2ZwWDdhZ2xFSjse2q_piHhKN4p4EGNFrIB5.json?key=ktmhc0kCSdk8VdMrfAi4J8ZaVOu4FQqu';
     
     const defaultCenter = [55.20640070230113,  25.131564168274384];
-    const defaultZoom = 13; // <-- UPDATED: Increased zoom to 13
+    const defaultZoom = 13; 
     const defaultPitch = 45;
     const defaultBearing = 0;
+
+    // --- LIVE COUNTER STATE (Global to prevent jumps) ---
+    const liveCounters = {};
+
+    function safeId(str) {
+        if (!str) return 'unknown';
+        return str.replace(/[^a-zA-Z0-9]/g, '_');
+    }
+
+    // 1. Initialize or Retrieve Count
+    function getLiveCount(centerName) {
+        const id = safeId(centerName);
+        if (!liveCounters[id]) {
+            // Random start between 65 and 150
+            liveCounters[id] = Math.floor(Math.random() * (150 - 65 + 1)) + 65;
+        }
+        return liveCounters[id];
+    }
+
+    // 2. Simulation Loop (Every 1 second)
+    setInterval(() => {
+        const keys = Object.keys(liveCounters);
+        if (keys.length === 0) return;
+
+        keys.forEach(key => {
+            // To average 1 update every ~8.5 seconds (7-10s range), 
+            // we need roughly a 12% chance per second.
+            if (Math.random() < 0.12) {
+                
+                // Increment by 1 or 2
+                const increment = Math.floor(Math.random() * 2) + 1;
+                liveCounters[key] += increment;
+
+                // Check if this center's popup is currently open in the DOM
+                const counterElement = document.getElementById(`count-${key}`);
+                if (counterElement) {
+                    counterElement.innerText = liveCounters[key].toLocaleString();
+                    
+                    // Subtle flash effect to indicate live update
+                    counterElement.style.color = '#fff';
+                    setTimeout(() => { counterElement.style.color = '#63B3ED'; }, 300);
+                }
+            }
+        });
+    }, 1000);
+
 
     const map = tt.map({
             key: 'ktmhc0kCSdk8VdMrfAi4J8ZaVOu4FQqu',
@@ -230,45 +233,39 @@
             style: AIMode
     });  
 
-    // Get button and map elements
     const mapElement = document.getElementById('map');
     const mapToggleBtn = document.getElementById('mapToggleBtn');
-    const homeBtn = document.getElementById('homeBtn'); // Get the recenter button
+    const homeBtn = document.getElementById('homeBtn'); 
 
-    // Apply the transparency class if enabled immediately after map definition
     if (ENABLE_TRANSPARENCY) {
         mapElement.classList.add('vignette-mask');
     }
 
-    // --- NEW: Map Toggle Logic ---
+    // --- Map Toggle Logic ---
     let isMapVisible = true;
     mapToggleBtn.addEventListener('click', () => {
         isMapVisible = !isMapVisible;
         
         if (isMapVisible) {
             mapElement.classList.remove('map-hidden');
-            homeBtn.classList.remove('button-hidden'); // Show home button
+            homeBtn.classList.remove('button-hidden'); 
             mapToggleBtn.textContent = '🌐 Map';
         } else {
             mapElement.classList.add('map-hidden');
-            homeBtn.classList.add('button-hidden'); // Hide home button
+            homeBtn.classList.add('button-hidden'); 
             mapToggleBtn.textContent = '☐ Map';
         }
         
-        // Ensure the map viewport is adjusted when it becomes visible again
         if (isMapVisible) {
             map.resize();
         }
     });
     
-    // --- Popup for hover callouts ---
-
     let popup = null;
     let markers = [];
     let popupTimeout = null;
     let isMouseOverPopup = false;
 
-    // --- Home Button Logic ---
     homeBtn.addEventListener('click', () => {
     map.flyTo({
             center: defaultCenter,
@@ -280,42 +277,28 @@
     });
     });
 
-
     let centersGeoJSON;
 
-    // --- Helpers ---
     function normalizeString(str) {
         if (!str) return '';
         return str.trim().replace(/\s+/g, ' ').toLowerCase();
     }
 
-    // --- NEW: Helper function to get waiting time color class ---
     const getWaitingTimeClass = (timeString) => {
-        if (!timeString || timeString === 'N/A') {
-            return ''; // Default color (will be white)
-        }
-        // Get the numeric value from a string like "6.5 minutes"
+        if (!timeString || timeString === 'N/A') return ''; 
         const numericValue = parseFloat(timeString);
-        if (isNaN(numericValue)) {
-            return ''; // Default color
-        }
+        if (isNaN(numericValue)) return ''; 
 
-        if (numericValue <= 7) {
-            return 'wt-green';
-        } else if (numericValue > 7 && numericValue <= 9) {
-            return 'wt-yellow';
-        } else { // numericValue > 9
-            return 'wt-red';
-        }
+        if (numericValue <= 7) return 'wt-green';
+        else if (numericValue > 7 && numericValue <= 9) return 'wt-yellow';
+        else return 'wt-red';
     };
 
-    // --- Clear existing markers ---
     function clearMarkers() {
         markers.forEach(marker => marker.remove());
         markers = [];
     }
 
-    // --- Add markers for centers ---
     function addCenterMarkers(geoJSON) {
         clearMarkers();
         
@@ -323,46 +306,41 @@
             const coords = feature.geometry.coordinates;
             const centerName = feature.properties.Center;
             
-            // Create custom marker element
+            // Init the counter for this center immediately
+            getLiveCount(centerName);
+
             const markerElement = document.createElement('div');
             markerElement.className = 'custom-marker';
             
-            // Create marker
             const marker = new tt.Marker({
                 element: markerElement
             })
             .setLngLat(coords)
             .addTo(map);
 
-            // Add hover events
             markerElement.addEventListener('mouseenter', (e) => {
-                if (isMouseOverPopup) {
-                        return;
-                }
+                if (isMouseOverPopup) return;
 
-                // Clear any pending timeout
                 if (popupTimeout) {
                     clearTimeout(popupTimeout);
                     popupTimeout = null;
                 }
                 
-                // Remove existing popup
-                if (popup) {
-                    popup.remove();
-                }
+                if (popup) popup.remove();
                 
-                const centerName = feature.properties.Center;
-                const link = feature.properties.link || '#';
-                const rating = feature.properties.rating || 'N/A';
-                const waitingTime = feature.properties.average_waiting_time || 'N/A';
-                // --- ADDED NEW KPIs ---
-                const operationalEfficiency = feature.properties['Operational Efficiency'] || 'N/A';
-                const employeeHappiness = feature.properties['Employee Happiness'] || 'N/A';
+                const props = feature.properties;
+                const link = props.link || '#';
+                const rating = props.rating || 'N/A';
+                const waitingTime = props.average_waiting_time || 'N/A';
+                const operationalEfficiency = props['Operational Efficiency'] || 'N/A';
+                const employeeHappiness = props['Employee Happiness'] || 'N/A';
 
-                // --- NEW: Get the color class for the waiting time ---
                 const waitingTimeClass = getWaitingTimeClass(waitingTime);
                 
-                // Generate star rating display
+                // Get current counter value
+                const liveVal = getLiveCount(centerName);
+                const centerId = safeId(centerName);
+
                 const generateStars = (rating) => {
                     if (rating === 'N/A') return 'N/A';
                     const stars = Math.round(rating);
@@ -371,26 +349,30 @@
                     return `<span class="rating-stars">${fullStars}${emptyStars}</span> ${rating}`;
                 };
                 
-                // Create new popup with formatted content
                 popup = new tt.Popup({
                     closeButton: false,
                     closeOnClick: false,
-                    offset: [0, -30] // Offset for smaller marker
+                    offset: [0, -30] 
                 })
                 .setLngLat(coords)
-                // --- UPDATED HTML TEMPLATE ---
                 .setHTML(`
                     <div class="center-info-popup">
                         <div class="center-name">
                             <strong>Center:</strong> <a href="${link}" target="_blank">${centerName}</a>
                         </div>
+                        
+                        <div class="info-row" style="border-bottom: 1px solid #4A5568; padding-bottom: 4px; margin-bottom: 6px;">
+                            <span class="info-label" style="color:#E2E8F0;">Requests Completed:</span>
+                            <span id="count-${centerId}" class="info-value live-counter-val wt-blue">${liveVal.toLocaleString()}</span>
+                        </div>
+
                         <div class="info-row">
                             <span class="info-label">Rating:</span>
                             <span class="info-value">${generateStars(rating)}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Average waiting time:</span>
-                                                                        <span class="info-value ${waitingTimeClass}">${waitingTime}</span>
+                            <span class="info-value ${waitingTimeClass}">${waitingTime}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Operational Efficiency:</span>
@@ -404,7 +386,6 @@
                 `)
                 .addTo(map);
 
-                // Add hover events to the popup itself with a small delay
                 setTimeout(() => {
                     const popupElement = popup.getElement();
                     if (popupElement) {
@@ -430,7 +411,6 @@
             });
 
             markerElement.addEventListener('mouseleave', () => {
-                // Add a longer delay before hiding the popup
                 popupTimeout = setTimeout(() => {
                     if (popup) {
                         popup.remove();
@@ -443,7 +423,6 @@
         });
     }
 
-    // --- Filter centers based on data ---
     function filterCenters(lookup) {
         if (!centersGeoJSON) return { type: 'FeatureCollection', features: [] };
         
@@ -460,7 +439,6 @@
         else if (norm === 'satellite') map.setStyle(SatelliteStyle);
     }
 
-    // --- Core Update ---
     function updateMapFromVA(msg) {
         if (!centersGeoJSON) {
             console.warn("GeoJSON not loaded yet");
@@ -472,7 +450,7 @@
         const tIdx = cols.indexOf('time formatted');
 
         if (cIdx < 0) {
-            console.warn("Missing 'center' column. Got:", cols);
+            // If no message data to filter, we might just return or do nothing
             return;
         }
 
@@ -482,7 +460,6 @@
             return;
         }
 
-        // If we have time data, get the latest time entries
         let lookup = {};
         if (tIdx >= 0) {
             const lastTime = rows[rows.length - 1][tIdx];
@@ -492,22 +469,16 @@
                 }
             });
         } else {
-            // If no time column, use all centers
             rows.forEach(r => {
-                lookup[normalizeString(r[cCdx])] = true;
+                lookup[normalizeString(r[cIdx])] = true;
             });
         }
-
-        console.log("Filtering centers:", lookup);
 
         const filtered = filterCenters(lookup);
         addCenterMarkers(filtered);
     }
 
-    // --- VA Message Handler ---
     function onMessage(evt) {
-        console.log("Raw VA event:", evt.data);
-
         let msg = evt.data;
         if (msg?.data?.data && Array.isArray(msg.data.data)) msg = msg.data;
         if (!msg?.data) return;
@@ -517,16 +488,12 @@
         if (msg.parameters?.Style) updateStyle(msg.parameters.Style);
     }
 
-    // --- Init ---
     map.on('load', function () {
         fetch('centers.geojson')
             .then(r => r.json())
             .then(data => {
                 centersGeoJSON = data;
-                
-                // Initially show all centers
                 addCenterMarkers(data);
-                
                 console.log("GeoJSON loaded with", data.features.length, "center features");
             })
             .catch(e => console.error("Error loading GeoJSON:", e));
