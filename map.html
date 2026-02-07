@@ -123,22 +123,17 @@
 
     .center-info-popup .info-value {
         font-weight: 600;
-        color: #FFFFFF; 
+        color: #FFFFFF; /* Standard White to match other stats */
     }
-
-    .center-info-popup .rating-stars { color: #F59E0B; }
 
     /* Colors */
     .info-value.wt-green { color: #68D391; }
     .info-value.wt-yellow { color: #F6E05E; }
     .info-value.wt-red { color: #F56565; }
-    .info-value.wt-blue { color: #63B3ED; } /* Cyan for counters */
-
-    /* Live Counter Font */
-    .live-counter-val {
-        font-family: 'Courier New', monospace; /* Monospace for number stability */
-        font-weight: 700;
-        transition: color 0.3s ease;
+    
+    /* Live Counter Transition */
+    .live-counter-anim {
+        transition: color 0.5s ease;
     }
 
     /* Custom marker styling */
@@ -177,7 +172,8 @@
     const defaultPitch = 45;
     const defaultBearing = 0;
 
-    // --- LIVE COUNTER STATE (Global to prevent jumps) ---
+    // --- LIVE COUNTER STATE (Global) ---
+    // Structure: { id: { value: 100, nextUpdate: timestamp } }
     const liveCounters = {};
 
     function safeId(str) {
@@ -185,42 +181,53 @@
         return str.replace(/[^a-zA-Z0-9]/g, '_');
     }
 
-    // 1. Initialize or Retrieve Count
+    // Initialize or Retrieve Count
     function getLiveCount(centerName) {
         const id = safeId(centerName);
         if (!liveCounters[id]) {
-            // Random start between 65 and 150
-            liveCounters[id] = Math.floor(Math.random() * (150 - 65 + 1)) + 65;
+            // Start between 65 and 150
+            liveCounters[id] = {
+                val: Math.floor(Math.random() * (150 - 65 + 1)) + 65,
+                // Set initial random next update
+                nextUpdate: Date.now() + (Math.random() * 2500) + 1500
+            };
         }
-        return liveCounters[id];
+        return liveCounters[id].val;
     }
 
-    // 2. Simulation Loop (Every 1 second)
+    // --- SIMULATION LOOP ---
+    // Runs frequently (every 100ms) to check if any center needs updating.
+    // This allows for precise, variable timing per center.
     setInterval(() => {
-        const keys = Object.keys(liveCounters);
-        if (keys.length === 0) return;
+        const now = Date.now();
+        const ids = Object.keys(liveCounters);
+        
+        ids.forEach(id => {
+            const center = liveCounters[id];
+            
+            // Is it time to update this specific center?
+            if (now >= center.nextUpdate) {
+                // 1. Increment
+                center.val += Math.floor(Math.random() * 2) + 1;
 
-        keys.forEach(key => {
-            // To average 1 update every ~8.5 seconds (7-10s range), 
-            // we need roughly a 12% chance per second.
-            if (Math.random() < 0.12) {
-                
-                // Increment by 1 or 2
-                const increment = Math.floor(Math.random() * 2) + 1;
-                liveCounters[key] += increment;
+                // 2. Schedule NEXT update (Variable: 1.5s to 4s from now)
+                // 1500ms + random(0-2500ms)
+                center.nextUpdate = now + 1500 + Math.random() * 2500;
 
-                // Check if this center's popup is currently open in the DOM
-                const counterElement = document.getElementById(`count-${key}`);
+                // 3. Update DOM if visible
+                const counterElement = document.getElementById(`count-${id}`);
                 if (counterElement) {
-                    counterElement.innerText = liveCounters[key].toLocaleString();
+                    counterElement.innerText = center.val.toLocaleString();
                     
-                    // Subtle flash effect to indicate live update
-                    counterElement.style.color = '#fff';
-                    setTimeout(() => { counterElement.style.color = '#63B3ED'; }, 300);
+                    // Subtle flash to blue, then back to white to match other stats
+                    counterElement.style.color = '#63B3ED'; 
+                    setTimeout(() => { 
+                        if(counterElement) counterElement.style.color = '#FFFFFF'; 
+                    }, 500);
                 }
             }
         });
-    }, 1000);
+    }, 100); 
 
 
     const map = tt.map({
@@ -330,7 +337,6 @@
                 
                 const props = feature.properties;
                 const link = props.link || '#';
-                const rating = props.rating || 'N/A';
                 const waitingTime = props.average_waiting_time || 'N/A';
                 const operationalEfficiency = props['Operational Efficiency'] || 'N/A';
                 const employeeHappiness = props['Employee Happiness'] || 'N/A';
@@ -340,14 +346,6 @@
                 // Get current counter value
                 const liveVal = getLiveCount(centerName);
                 const centerId = safeId(centerName);
-
-                const generateStars = (rating) => {
-                    if (rating === 'N/A') return 'N/A';
-                    const stars = Math.round(rating);
-                    const fullStars = '★'.repeat(stars);
-                    const emptyStars = '☆'.repeat(5 - stars);
-                    return `<span class="rating-stars">${fullStars}${emptyStars}</span> ${rating}`;
-                };
                 
                 popup = new tt.Popup({
                     closeButton: false,
@@ -361,15 +359,11 @@
                             <strong>Center:</strong> <a href="${link}" target="_blank">${centerName}</a>
                         </div>
                         
-                        <div class="info-row" style="border-bottom: 1px solid #4A5568; padding-bottom: 4px; margin-bottom: 6px;">
-                            <span class="info-label" style="color:#E2E8F0;">Requests Completed:</span>
-                            <span id="count-${centerId}" class="info-value live-counter-val wt-blue">${liveVal.toLocaleString()}</span>
+                        <div class="info-row">
+                            <span class="info-label">Requests Completed:</span>
+                            <span id="count-${centerId}" class="info-value live-counter-anim">${liveVal.toLocaleString()}</span>
                         </div>
 
-                        <div class="info-row">
-                            <span class="info-label">Rating:</span>
-                            <span class="info-value">${generateStars(rating)}</span>
-                        </div>
                         <div class="info-row">
                             <span class="info-label">Average waiting time:</span>
                             <span class="info-value ${waitingTimeClass}">${waitingTime}</span>
@@ -450,7 +444,6 @@
         const tIdx = cols.indexOf('time formatted');
 
         if (cIdx < 0) {
-            // If no message data to filter, we might just return or do nothing
             return;
         }
 
